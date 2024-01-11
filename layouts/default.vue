@@ -5,7 +5,7 @@ console.log('loaded')
 <template>
   <div>
     <section class="grid" style="min-width: 100vh">
-      <aside>Sidebar</aside>
+      <LayoutSidebar>Sidebar</LayoutSidebar>
       <div>
         <slot />
       </div>
