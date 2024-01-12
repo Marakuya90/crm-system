@@ -18,7 +18,7 @@ withDefaults(defineProps<Props>(), {
   <Primitive
     :as="as"
     :as-child="asChild"
-    :class="cn(buttonVariants({ variant: 'default', size: 'default' }), $attrs.class ?? '')"
+    :class="cn(buttonVariants({ variant: 'secondary', size: 'default' }), $attrs.class ?? '')"
   >
     <slot />
   </Primitive>

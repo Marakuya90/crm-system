@@ -4,10 +4,9 @@ useHead({
 })
 
 const emailRef = ref('')
+const nameRef = ref('')
+const passwordRef = ref('')
 
-watch(emailRef, () => {
-  console.log(emailRef)
-})
 </script>
 
 <template>
@@ -21,6 +20,21 @@ watch(emailRef, () => {
             type="email"
             v-model="emailRef"
             class="mb-3"/>
+        <UiInput
+            placeholder="Name"
+            type="text"
+            v-model="nameRef"
+            class="mb-3"/>
+        <UiInput
+            placeholder="Password"
+            type="password"
+            v-model="passwordRef"
+            class="mb-3"/>
+        <div class="flex items-center justify-center gap-5">
+          <UiButton type="button">Login</UiButton>
+          <UiButton type="button">Register</UiButton>
+        </div>
+
       </form>
     </div>
 
