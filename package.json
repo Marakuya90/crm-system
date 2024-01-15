@@ -13,6 +13,7 @@
     "@nuxt/image": "^1.1.0",
     "@nuxtjs/google-fonts": "^3.1.3",
     "@nuxtjs/tailwindcss": "^6.10.4",
+    "@types/uuid": "^9.0.7",
     "nuxt": "^3.9.0",
     "nuxt-icon": "^0.6.8",
     "shadcn-nuxt": "^0.8.6",
@@ -26,12 +27,11 @@
     "appwrite": "^13.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "dayjs": "^1.11.10",
     "pinia": "^2.1.7",
     "radix-vue": "^1.3.0",
     "tailwind-merge": "^2.2.0",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "overrides": {
-    "vue": "latest"
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^9.0.1"
   }
 }
