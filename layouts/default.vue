@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useAuthStore, useIsLoadingStore} from "~/store/auth.store";
 import { account } from "~/utils/appwrite";
-import Loader from "~/components/layout/Loader.vue";
 
 const authStore = useAuthStore()
 const router = useRouter()

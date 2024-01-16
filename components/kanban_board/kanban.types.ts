@@ -1,7 +1,7 @@
 import type {EnumStatus} from "~/types/deals.types"
 
 export interface ICard {
-    is: string
+    id: string
     name: string
     price: number
     $createAt: string

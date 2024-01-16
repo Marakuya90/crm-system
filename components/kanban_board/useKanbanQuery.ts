@@ -1,29 +1,31 @@
-import {EnumStatus} from "~/types/deals.types";
-import type {IColumn} from "~/components/kanban_board/kanban.types";
+import {useQuery} from "@tanstack/vue-query";
+import {COLLECTIONS_DEALS, DB_ID} from "~/app.constants";
+import {KANBAN_DATA} from "~/components/kanban_board/kanban.data";
+import type {IDeal} from "~/types/deals.types";
 
-export const KANBAN_DATA:IColumn[] = [{
-    id: EnumStatus.todo,
-    name: 'Входящие',
-    items: []
-    },
-    {
-        id: EnumStatus["to-be-agreed"],
-        name: 'На согласовании',
-        items: []
-    },
-    {
-        id: EnumStatus["in-progress"],
-        name: 'В производстве',
-        items: []
-    },
-    {
-        id: EnumStatus.produced,
-        name: 'Произведено',
-        items: []
-    },
-    {
-        id: EnumStatus.done,
-        name: 'К отгрузке',
-        items: []
-    },
-]
+export function useKanbanQuery() {
+    return useQuery({
+        queryKey: ['deals'],
+        queryFn: () => DB.listDocuments(DB_ID, COLLECTIONS_DEALS),
+        select(data) {
+            const newBoard = [...KANBAN_DATA]
+            console.log(data.documents)
+            const deals = data.documents as unknown as IDeal[]
+            console.log(deals)
+            for(const deal of deals) {
+                const column = newBoard.find(column => column.id == deal.status)
+                if(column) {
+                    column.items.push({
+                        $createAt: deal.$createdAt,
+                        id: deal.$id,
+                        name: deal.name,
+                        price: deal.price,
+                        companyName: deal.customer.name,
+                        status: column.name
+                    })
+                }
+            }
+            return newBoard
+        }
+    })
+}
