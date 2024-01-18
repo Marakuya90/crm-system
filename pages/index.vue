@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {useKanbanQuery} from "~/components/kanban_board/useKanbanQuery";
+import type {ICard, IColumn} from "~/components/kanban_board/kanban.types";
 import dayjs from "dayjs";
 
 const {data, isLoading, refetch} = useKanbanQuery()

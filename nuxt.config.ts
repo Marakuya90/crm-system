@@ -8,7 +8,10 @@ export default defineNuxtConfig({
                 ital: [300]
             },
         }
-    }],"nuxt-icon", '@pinia/nuxt',
+    }], "nuxt-icon", '@pinia/nuxt',
+        ['@vee-validate/nuxt', {
+            autoImports: true,
+        }]
     ],
     shadcn: {
         prefix: 'Ui',

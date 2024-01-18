@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {useMutation} from "@tanstack/vue-query";
-import {v4} from "uuid";
+import {v4 as uuid} from "uuid";
 import {COLLECTIONS_DEALS, DB_ID} from "~/app.constants";
 import type {IDeal} from '~/types/deals.types'
 
-interface IdealFormState extends Pick<IDeal, 'name'|'price'> {
+interface IDealFormState extends Pick<IDeal, 'name'|'price'> {
   customer: {
     name: string,
     email: string
@@ -23,6 +23,24 @@ const props = defineProps({
 })
 
 const isOpenForm = ref<boolean>(false)
+
+const {handleSubmit, handleReset, defineField} = useForm<IDealFormState>({
+  initialValues: {
+    status: props.status
+  }
+})
+
+
+const [name, nameAttrs] = defineField('name')
+const [price, priceAttrs] = defineField('price')
+const [customerName, customerNameAttrs] = defineField('customer.name')
+const [customerEmail, customerEmailAttrs] = defineField('customer.email')
+
+const {} = useMutation({
+  mutationKey: ['create a new deal'],
+  mutationFn: (data: IDealFormState) => DB.createDocument(DB_ID, COLLECTIONS_DEALS, uuid(),data)
+})
+
 </script>
 
 <template>
