@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import type {EnumStatus} from "~/types/deals.types";
 import {useMutation} from "@tanstack/vue-query";
 import {COLLECTIONS_DEALS, DB_ID} from "~/app.constants";
+import {generateColumnStyle} from "~/components/kanban_board/generate-gradient";
 
 const {data, isLoading, refetch} = useKanbanQuery()
 useSeoMeta({
@@ -19,7 +20,7 @@ type TypeMutationVariables = {
   status?: EnumStatus
 }
 
-const { mutate } = useMutation({
+const {mutate} = useMutation({
   mutationKey: ['move card'],
   mutationFn: ({docId, status}: TypeMutationVariables) =>
       DB.updateDocument(DB_ID, COLLECTIONS_DEALS, docId, {
@@ -28,14 +29,12 @@ const { mutate } = useMutation({
   onSuccess: () => refetch()
 })
 
-function handleDragStart(card:ICard, column: IColumn) {
+function handleDragStart(card: ICard, column: IColumn) {
   dragCardRef.value = card
   sourseColumnRef.value = column
 }
-// function handleDragOver(event: DragEvent) {
-//  event.preventDefault()
-// }
-function handleDrop (targetColumn:IColumn) {
+
+function handleDrop(targetColumn: IColumn) {
   if (dragCardRef.value && sourseColumnRef.value) {
     mutate({docId: dragCardRef.value.id, status: targetColumn.id})
   }
@@ -53,16 +52,17 @@ function handleDrop (targetColumn:IColumn) {
           :key="index"
           @dragover.prevent
           @drop="() => handleDrop(column)"
-          >
-        <div class="rounded bg-slate-700 py-1 px-5 mb-2 text-center">
+      class="min-h-screen">
+        <div
+            :style="generateColumnStyle(+index,data?.length)"
+            class="rounded bg-slate-700 py-1 px-5 mb-2 text-center">
           {{ column.name }}
         </div>
         <div>
 
           <KanbanBoardCreateDeal
-            :refetch="refetch"
-            :status="column.id"
-          />
+              :refetch="refetch"
+              :status="column.id"/>
 
           <UiCard
               v-for="card in column.items"
@@ -72,14 +72,13 @@ function handleDrop (targetColumn:IColumn) {
               @dragstart="() => handleDragStart(card, column)">
             <UiCardHeader role="button">
               <UiCardTitle>{{ card.name }}</UiCardTitle>
-              <UiCardDescription>{{convertCurrency(card.price)}}</UiCardDescription>
-              </UiCardHeader>
+              <UiCardDescription>{{ convertCurrency(card.price) }}</UiCardDescription>
+            </UiCardHeader>
             <UiCardContent class="text-xs">{{ card.companyName }}</UiCardContent>
             <UiCardFooter>{{ dayjs(card.$createdAt).format('DD MMMM YYYY') }}</UiCardFooter>
           </UiCard>
         </div>
       </div>
-
     </div>
   </div>
 
