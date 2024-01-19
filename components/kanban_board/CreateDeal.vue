@@ -30,17 +30,23 @@ const {handleSubmit, handleReset, defineField} = useForm<IDealFormState>({
   }
 })
 
-
 const [name, nameAttrs] = defineField('name')
 const [price, priceAttrs] = defineField('price')
 const [customerName, customerNameAttrs] = defineField('customer.name')
 const [customerEmail, customerEmailAttrs] = defineField('customer.email')
 
-const {} = useMutation({
+const {mutate, isPending} = useMutation({
   mutationKey: ['create a new deal'],
-  mutationFn: (data: IDealFormState) => DB.createDocument(DB_ID, COLLECTIONS_DEALS, uuid(),data)
+  mutationFn: (data: IDealFormState) => DB.createDocument(DB_ID, COLLECTIONS_DEALS, uuid(), data),
+  onSuccess(data) {
+    props.refetch && props.refetch()
+    handleReset()
+  }
 })
 
+const onSubmit = handleSubmit(values =>{
+  mutate(values)
+})
 </script>
 
 <template>
@@ -49,16 +55,43 @@ const {} = useMutation({
   @click="isOpenForm = !isOpenForm">
     <Icon v-if="isOpenForm"
           name="radix-icons:arrow-up"
-          size="25"
+          size="35"
           class="fade-in-100 fade-out-0"></Icon>
     <Icon v-if="!isOpenForm"
           name="icons8:plus"
-          size="25"
+          size="35"
           class="fade-in-100 fade-out-0"></Icon>
   </button>
-  <form>
-    <input type="text" class="input">
-    <button class="button"></button>
+  <form v-if="isOpenForm" @submit="onSubmit" class="form">
+    <UiInput
+        placeholder="Наименование"
+        v-model="name"
+        v-bind="nameAttrs"
+        type="text"
+        class="input"></UiInput>
+    <UiInput
+        placeholder="Сумма"
+        v-model="price"
+        v-bind="priceAttrs"
+        type="text"
+        class="input"></UiInput>
+    <UiInput
+        placeholder="Компания"
+        v-model="customerName"
+        v-bind="customerNameAttrs"
+        type="text"
+        class="input"></UiInput>
+    <UiInput
+        placeholder="Email"
+        v-model="customerEmail"
+        v-bind="customerEmailAttrs"
+        type="text"
+        class="input"></UiInput>
+    <button
+        class="btn"
+        :disabled="isPending">
+      {{ isPending ?"Загрузка..." : "Добавить"}}
+    </button>
   </form>
 </div>
 </template>
