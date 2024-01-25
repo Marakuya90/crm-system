@@ -8,6 +8,9 @@ import {COLLECTIONS_DEALS, DB_ID} from "~/app.constants";
 import {generateColumnStyle} from "~/components/kanban_board/generate-gradient";
 
 const {data, isLoading, refetch} = useKanbanQuery()
+
+const store = useDealSlideStore()
+
 useSeoMeta({
   title: 'Home | CRM System'
 })
@@ -52,25 +55,25 @@ function handleDrop(targetColumn: IColumn) {
           :key="index"
           @dragover.prevent
           @drop="() => handleDrop(column)"
-      class="min-h-screen">
+          class="min-h-screen">
         <div
             :style="generateColumnStyle(+index,data?.length)"
             class="rounded bg-slate-700 py-1 px-5 mb-2 text-center">
           {{ column.name }}
         </div>
         <div>
-
           <KanbanBoardCreateDeal
               :refetch="refetch"
               :status="column.id"/>
-
           <UiCard
               v-for="card in column.items"
               :key="card.id"
               class="mb-3"
               draggable="true"
               @dragstart="() => handleDragStart(card, column)">
-            <UiCardHeader role="button">
+            <UiCardHeader
+                @click="store.set(card)"
+                role="button">
               <UiCardTitle>{{ card.name }}</UiCardTitle>
               <UiCardDescription>{{ convertCurrency(card.price) }}</UiCardDescription>
             </UiCardHeader>
@@ -80,6 +83,6 @@ function handleDrop(targetColumn: IColumn) {
         </div>
       </div>
     </div>
+    <KanbanBoardSlideoverSlideOver />
   </div>
-
 </template>
